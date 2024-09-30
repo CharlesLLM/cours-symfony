@@ -8,3 +8,4 @@
 > Créer ses propres routes/controllers pour afficher les pages des templates 
 
 - Utiliser des sous templates avec Twig 
+- Créer des entités avec le CLI de Symfony 
