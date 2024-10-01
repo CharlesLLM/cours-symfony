@@ -10,13 +10,13 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class CategoryController extends AbstractController
 {
-    #[Route('/discover')]
+    #[Route('/discover', name: 'discover')]
     public function index(): Response
     {
         return $this->render('movie/discover.html.twig');
     }
 
-    #[Route('/category')]
+    #[Route('/category', name: 'show_category')]
     public function show(): Response
     {
         return $this->render('movie/category.html.twig');
