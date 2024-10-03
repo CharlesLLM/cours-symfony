@@ -14,36 +14,68 @@ class SubscriptionHistory
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $startDate = null;
+    private ?\DateTimeImmutable $startAt = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $endDate = null;
+    private ?\DateTimeImmutable $endAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'subscriptionHistories')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $subscriber = null;
+
+    #[ORM\ManyToOne(inversedBy: 'subscriptionHistories')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Subscription $subscription = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getStartDate(): ?\DateTimeImmutable
+    public function getStartAt(): ?\DateTimeImmutable
     {
-        return $this->startDate;
+        return $this->startAt;
     }
 
-    public function setStartDate(\DateTimeImmutable $startDate): static
+    public function setStartAt(\DateTimeImmutable $startAt): static
     {
-        $this->startDate = $startDate;
+        $this->startAt = $startAt;
 
         return $this;
     }
 
-    public function getEndDate(): ?\DateTimeImmutable
+    public function getEndAt(): ?\DateTimeImmutable
     {
-        return $this->endDate;
+        return $this->endAt;
     }
 
-    public function setEndDate(\DateTimeImmutable $endDate): static
+    public function setEndAt(\DateTimeImmutable $endAt): static
     {
-        $this->endDate = $endDate;
+        $this->endAt = $endAt;
+
+        return $this;
+    }
+
+    public function getSubscriber(): ?User
+    {
+        return $this->subscriber;
+    }
+
+    public function setSubscriber(?User $subscriber): static
+    {
+        $this->subscriber = $subscriber;
+
+        return $this;
+    }
+
+    public function getSubscription(): ?Subscription
+    {
+        return $this->subscription;
+    }
+
+    public function setSubscription(?Subscription $subscription): static
+    {
+        $this->subscription = $subscription;
 
         return $this;
     }

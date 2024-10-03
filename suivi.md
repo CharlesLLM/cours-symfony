@@ -9,3 +9,6 @@
 
 - Utiliser des sous templates avec Twig 
 - Créer des entités avec le CLI de Symfony 
+- Relations et héritages entre entités
+- Migrations
+- Fixtures

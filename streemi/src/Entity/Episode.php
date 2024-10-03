@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\EpisodeRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EpisodeRepository::class)]
@@ -20,8 +19,12 @@ class Episode
     #[ORM\Column]
     private ?int $duration = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $releaseDate = null;
+    #[ORM\Column]
+    private ?\DateTimeImmutable $releasedAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'episodes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Season $season = null;
 
     public function getId(): ?int
     {
@@ -52,14 +55,26 @@ class Episode
         return $this;
     }
 
-    public function getReleaseDate(): ?\DateTimeInterface
+    public function getReleasedAt(): ?\DateTimeImmutable
     {
-        return $this->releaseDate;
+        return $this->releasedAt;
     }
 
-    public function setReleaseDate(\DateTimeInterface $releaseDate): static
+    public function setReleasedAt(\DateTimeImmutable $releasedAt): static
     {
-        $this->releaseDate = $releaseDate;
+        $this->releasedAt = $releasedAt;
+
+        return $this;
+    }
+
+    public function getSeason(): ?Season
+    {
+        return $this->season;
+    }
+
+    public function setSeason(?Season $season): static
+    {
+        $this->season = $season;
 
         return $this;
     }

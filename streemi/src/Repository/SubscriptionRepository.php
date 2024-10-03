@@ -2,22 +2,22 @@
 
 namespace App\Repository;
 
-use App\Entity\Subscriptions;
+use App\Entity\Subscription;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Subscriptions>
+ * @extends ServiceEntityRepository<Subscription>
  */
-class SubscriptionsRepository extends ServiceEntityRepository
+class SubscriptionRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Subscriptions::class);
+        parent::__construct($registry, Subscription::class);
     }
 
     //    /**
-    //     * @return Subscriptions[] Returns an array of Subscriptions objects
+    //     * @return Subscription[] Returns an array of Subscription objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -31,7 +31,7 @@ class SubscriptionsRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Subscriptions
+    //    public function findOneBySomeField($value): ?Subscription
     //    {
     //        return $this->createQueryBuilder('s')
     //            ->andWhere('s.exampleField = :val')
