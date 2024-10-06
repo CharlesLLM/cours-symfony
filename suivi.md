@@ -6,3 +6,7 @@
 - Premiers controllers et premières routes (simple + composées) 
 - Templates Twig (simples, includes, sous-templates, parent)
 - Entités (basique) via le maker Sf
+- Entités & relations 
+- Heritage d'entités
+- Migrations
+- Fixtures
