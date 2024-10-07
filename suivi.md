@@ -12,3 +12,5 @@
 - Relations et héritages entre entités
 - Migrations
 - Fixtures
+
+- Injection des entités et templating (affichage & boucles for)
