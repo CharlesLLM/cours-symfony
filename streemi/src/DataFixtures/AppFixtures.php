@@ -2,102 +2,321 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Category;
+use App\Entity\Comment;
 use App\Entity\Episode;
+use App\Entity\Language;
+use App\Entity\Media;
 use App\Entity\Movie;
+use App\Entity\Playlist;
+use App\Entity\PlaylistMedia;
 use App\Entity\Season;
 use App\Entity\Serie;
 use App\Entity\Subscription;
 use App\Entity\SubscriptionHistory;
 use App\Entity\User;
+use App\Enum\CommentStatusEnum;
 use App\Enum\UserStatusEnum;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
 class AppFixtures extends Fixture
 {
+    public const MAX_USERS = 10;
+    public const MAX_MEDIA = 100;
+    public const MAX_SUBSCRIPTIONS = 3;
+    public const MAX_SEASONS = 3;
+    public const MAX_EPISODES = 10;
+
+    public const PLAYLISTS_PER_USER = 5;
+    public const MAX_MEDIA_PER_PLAYLIST = 3;
+    public const MAX_LANGUAGE_PER_MEDIA = 3;
+    public const MAX_CATEGORY_PER_MEDIA = 3;
+    public const MAX_SUBSCRIPTIONS_HISTORY_PER_USER = 3;
+    public const MAX_COMMENTS_PER_MEDIA = 10;
+
     public function load(ObjectManager $manager): void
     {
-        $this->createSeries($manager);
-        $this->createMovies($manager);
-        $users = $this->createUsers($manager);
+        $users = [];
+        $medias = [];
+        $playlists = [];
+        $categories = [];
+        $languages = [];
+        $subscriptions = [];
 
-//        $subscription = new Subscription();
-//        $subscription->setName('Abonnement 6 mois');
-//        $subscription->setDuration(6);
-//        $subscription->setPrice(60);
-//        $user->setCurrentSubscription($subscription);
-//        $manager->persist($subscription);
-//
-//        $history1 = new SubscriptionHistory();
-//        $history1->setStartAt(new \DateTimeImmutable('-6 months'));
-//        $history1->setEndAt(new \DateTimeImmutable('-1 hour'));
-//        $history1->setSubscriber($user);
-//        $history1->setSubscription($subscription);
-//        $manager->persist($history1);
+        $this->createUsers($manager, $users);
+        $this->createPlaylists($manager, $users, $playlists);
+        $this->createSubscriptions($manager, $users, $subscriptions);
+        $this->createCategories($manager, $categories);
+        $this->createLanguages($manager, $languages);
+        $this->createMedia($manager, $medias);
+        $this->createComments($manager, $medias, $users);
+
+        $this->linkMediaToPlaylists($medias, $playlists, $manager);
+        $this->linkSubscriptionToUsers($users, $subscriptions, $manager);
+        $this->linkMediaToCategories($medias, $categories);
+        $this->linkMediaToLanguages($medias, $languages);
 
         $manager->flush();
     }
 
-    protected function createSeries(ObjectManager $manager): void
+    protected function createSubscriptions(ObjectManager $manager, array &$users, array &$subscriptions): void
     {
-        for ($i = 0; $i < 10; $i++) {
-            $serie = new Serie();
-            $serie->setTitle('Serie #1');
-            $serie->setReleaseDate(new \DateTime('2008-01-20'));
-            $serie->setShortDescription("Courte Description {$i}");
-            $serie->setLongDescription("Longue Description {$i}");
-            $serie->setCoverImage("image_{$i}.jpg");
-            $serie->setStaff([]);
-            $manager->persist($serie);
+        for ($m = 0; $m < self::MAX_SUBSCRIPTIONS; $m++) {
+            $duration = 10 * ($m + 1);
 
-            $nbDeSaisonAGenerer = random_int(1, 5);
-            for ($j = 0; $j < $nbDeSaisonAGenerer; $j++) {
-                $season = new Season();
-                $season->setNumber($j);
-                $season->setSerie($serie);
-                $manager->persist($season);
+            $abonnement = new Subscription();
+            $abonnement->setDuration(duration: $duration);
+            $abonnement->setName(name: "Abonnement {$duration} jours");
+            $abonnement->setPrice(price: 50);
+            $manager->persist(object: $abonnement);
+            $subscriptions[] = $abonnement;
 
-                $nbDEpisodesAGenerer = random_int(1, 10);
-                for ($k = 0; $k < $nbDEpisodesAGenerer; $k++) {
-                    $episode = new Episode();
-                    $episode->setTitle("Episode {$k}");
-                    $episode->setDuration(50);
-                    $episode->setReleasedAt(new \DateTimeImmutable());
-                    $season->addEpisode($episode);
-                    $manager->persist($episode);
-                }
+            $randomUser = $users[array_rand($users)];
+            $randomUser->setCurrentSubscription(currentSubscription: $abonnement);
+        }
+    }
+
+    protected function createMedia(ObjectManager $manager, array &$medias): void
+    {
+        for ($j = 0; $j < self::MAX_MEDIA; $j++) {
+            $media = random_int(min: 0, max: 1) === 0 ? new Movie() : new Serie();
+            $title = $media instanceof Movie ? 'Film' : 'Série';
+
+            $media->setTitle(title: "{$title} n°{$j}");
+            $media->setLongDescription(longDescription: "Longue description {$j}");
+            $media->setShortDescription(shortDescription: "Short description {$j}");
+            $media->setCoverImage(coverImage: "https://picsum.photos/1920/1080?random={$j}");
+            $media->setReleaseDate(releaseDate: new \DateTime(datetime: "+7 days"));
+            $manager->persist(object: $media);
+            $medias[] = $media;
+
+            $this->addCastingAndStaff($media);
+
+            if ($media instanceof Serie) {
+                $this->createSeasons($manager, $media);
+            }
+
+//            if ($media instanceof Movie) {
+//                $media->setDuration(duration: random_int(60, 180));
+//            }
+        }
+    }
+
+    protected function createUsers(ObjectManager $manager, array &$users): void
+    {
+        for ($i = 0; $i < self::MAX_USERS; $i++) {
+            $user = new User();
+            $user->setEmail(email: "test_{$i}@example.com");
+            $user->setUsername(username: "test_{$i}");
+            $user->setPassword(password: 'coucou');
+            $user->setAccountStatus(UserStatusEnum::ACTIVE);
+            $users[] = $user;
+
+            $manager->persist(object: $user);
+        }
+    }
+
+    public function createPlaylists(ObjectManager $manager, array &$users, array &$playlists): void
+    {
+        foreach ($users as $user) {
+            for ($k = 0; $k < self::PLAYLISTS_PER_USER; $k++) {
+                $playlist = new Playlist();
+                $playlist->setName(name: "Ma playlist {$k}");
+                $playlist->setCreatedAt(createdAt: new \DateTimeImmutable());
+                $playlist->setUpdatedAt(updatedAt: new \DateTimeImmutable());
+                $playlist->setCreator(creator: $user);
+                $playlists[] = $playlist;
+
+                $manager->persist(object: $playlist);
             }
         }
     }
 
-    protected function createMovies(ObjectManager $manager): void
+    protected function createCategories(ObjectManager $manager, array &$categories): void
     {
-        for ($i = 0; $i < 10; $i++) {
-            $serie = new Movie();
-            $serie->setTitle('Serie #1');
-            $serie->setReleaseDate(new \DateTime('2008-01-20'));
-            $serie->setShortDescription("Courte Description {$i}");
-            $serie->setLongDescription("Longue Description {$i}");
-            $serie->setCoverImage("image_{$i}.jpg");
-            $serie->setStaff([]);
-            $manager->persist($serie);
+        $array = [
+            ['nom' => 'Action', 'label' => 'Action'],
+            ['nom' => 'Comédie', 'label' => 'Comédie'],
+            ['nom' => 'Drame', 'label' => 'Drame'],
+            ['nom' => 'Horreur', 'label' => 'Horreur'],
+            ['nom' => 'Science-fiction', 'label' => 'Science-fiction'],
+            ['nom' => 'Thriller', 'label' => 'Thriller'],
+        ];
+
+        foreach ($array as $element) {
+            $category = new Category();
+            $category->setNom($element['nom']);
+            $category->setLabel($element['label']);
+            $manager->persist($category);
+            $categories[] = $category;
         }
     }
 
-    protected function createUsers(ObjectManager $manager): array
+    protected function createLanguages(ObjectManager $manager, array &$languages): void
     {
-        $users = [];
+        $array = [
+            ['code' => 'fr', 'nom' => 'Français'],
+            ['code' => 'en', 'nom' => 'Anglais'],
+            ['code' => 'es', 'nom' => 'Espagnol'],
+            ['code' => 'de', 'nom' => 'Allemand'],
+            ['code' => 'it', 'nom' => 'Italien'],
+        ];
 
-        for ($i = 0; $i < 10; $i++) {
-            $user = new User();
-            $user->setUsername('admin');
-            $user->setEmail('admin@example.com');
-            $user->setAccountStatus(UserStatusEnum::ACTIVE);
-            $user->setPassword('motdepasse');
-            $manager->persist($user);
-            $users[] = $user;
+        foreach ($array as $element) {
+            $language = new Language();
+            $language->setCode($element['code']);
+            $language->setNom($element['nom']);
+            $manager->persist($language);
+            $languages[] = $language;
+        }
+    }
+
+    protected function createSeasons(ObjectManager $manager, Serie $media): void
+    {
+        for ($i = 0; $i < random_int(1, self::MAX_SEASONS); $i++) {
+            $season = new Season();
+            $season->setNumber('Saison ' . ($i + 1));
+            $season->setSerie($media);
+
+            $manager->persist($season);
+            $this->createEpisodes($season, $manager);
+        }
+    }
+
+    protected function createEpisodes(Season $season, ObjectManager $manager): void
+    {
+        for ($i = 0; $i < random_int(1, self::MAX_EPISODES); $i++) {
+            $episode = new Episode();
+            $episode->setTitle('Episode ' . ($i + 1));
+            $episode->setDuration(random_int(10, 60));
+            $episode->setReleasedAt(new \DateTimeImmutable());
+            $episode->setSeason($season);
+
+            $manager->persist($episode);
+        }
+    }
+
+    protected function createComments(ObjectManager $manager, array $medias, array $users): void
+    {
+        /** @var Media $media */
+        foreach ($medias as $media) {
+            for ($i = 0; $i < random_int(1, self::MAX_COMMENTS_PER_MEDIA); $i++) {
+                $comment = new Comment();
+                $comment->setPublisher($users[array_rand($users)]);
+                $comment->setContent("Commentaire {$i}");
+//                $comment->setCreatedAt(new \DateTimeImmutable());
+                $comment->setStatus(random_int(0, 1) === 1 ? CommentStatusEnum::VALID : CommentStatusEnum::WAITING);
+                $comment->setMedia($media);
+
+//                $shouldHaveParent = random_int(0, 5) < 2;
+//                if ($shouldHaveParent) {
+//                    $parentComment = new Comment();
+//                    $parentComment->setPublisher($users[array_rand($users)]);
+//                    $parentComment->setContent("Commentaire parent");
+//                    $parentComment->setCreatedAt(new \DateTimeImmutable());
+//                    $parentComment->setStatus(random_int(0, 1) === 1 ? CommentStatusEnum::VALIDATED : CommentStatusEnum::WAITING);
+//                    $parentComment->setMedia($media);
+//                    $comment->setParentComment($parentComment);
+//                    $manager->persist($parentComment);
+//                }
+
+                $manager->persist($comment);
+            }
+        }
+    }
+
+    // link methods
+
+    protected function linkMediaToCategories(array $medias, array $categories): void
+    {
+        /** @var Media $media */
+        foreach ($medias as $media) {
+            for ($i = 0; $i < random_int(1, self::MAX_CATEGORY_PER_MEDIA); $i++) {
+                $media->addCategory($categories[array_rand($categories)]);
+            }
+        }
+    }
+
+    protected function linkMediaToLanguages(array $medias, array $languages): void
+    {
+        /** @var Media $media */
+        foreach ($medias as $media) {
+            for ($i = 0; $i < random_int(1, self::MAX_LANGUAGE_PER_MEDIA); $i++) {
+                $media->addLanguage($languages[array_rand($languages)]);
+            }
+        }
+    }
+
+    protected function linkMediaToPlaylists(array $medias, array $playlists, ObjectManager $manager): void
+    {
+        /** @var Media $media */
+        foreach ($medias as $media) {
+            for ($i = 0; $i < random_int(1, self::MAX_MEDIA_PER_PLAYLIST); $i++) {
+                $playlistMedia = new PlaylistMedia();
+                $playlistMedia->setMedia(media: $media);
+                $playlistMedia->setAddedAt(addedAt: new \DateTimeImmutable());
+                $playlistMedia->setPlaylist(playlist: $playlists[array_rand($playlists)]);
+                $manager->persist(object: $playlistMedia);
+            }
+        }
+    }
+
+    protected function linkSubscriptionToUsers(array $users, array $subscriptions, ObjectManager $manager): void
+    {
+        foreach ($users as $user) {
+            $sub = $subscriptions[array_rand($subscriptions)];
+
+            for ($i = 0; $i < random_int(1, self::MAX_SUBSCRIPTIONS_HISTORY_PER_USER); $i++) {
+                $history = new SubscriptionHistory();
+                $history->setSubscriber($user);
+                $history->setSubscription($sub);
+                $history->setStartAt(new \DateTimeImmutable());
+                $history->setEndAt(new \DateTimeImmutable());
+            }
+
+            $manager->persist($history);
+        }
+    }
+
+    protected function addCastingAndStaff(Media $media)
+    {
+        $staffData = [
+            ['name' => 'John Doe', 'role' => 'Réalisateur', 'image' => 'https://i.pravatar.cc/500/150?u=John+Doe'],
+            ['name' => 'Jane Doe', 'role' => 'Scénariste', 'image' => 'https://i.pravatar.cc/500/150?u=Jane+Doe'],
+            ['name' => 'Foo Bar', 'role' => 'Compositeur', 'image' => 'https://i.pravatar.cc/500/150?u=Foo+Bar'],
+            ['name' => 'Baz Qux', 'role' => 'Producteur', 'image' => 'https://i.pravatar.cc/500/150?u=Baz+Qux'],
+            ['name' => 'Alice Bob', 'role' => 'Directeur de la photographie', 'image' => 'https://i.pravatar.cc/500/150?u=Alice+Bob'],
+            ['name' => 'Charlie Delta', 'role' => 'Monteur', 'image' => 'https://i.pravatar.cc/500/150?u=Charlie+Delta'],
+            ['name' => 'Eve Fox', 'role' => 'Costumier', 'image' => 'https://i.pravatar.cc/500/150?u=Eve+Fox'],
+            ['name' => 'Grace Hope', 'role' => 'Maquilleur', 'image' => 'https://i.pravatar.cc/500/150?u=Grace+Hope'],
+            ['name' => 'Ivy Jack', 'role' => 'Cascades', 'image' => 'https://i.pravatar.cc/500/150?u=Ivy+Jack'],
+        ];
+
+        $castingData = [
+            ['name' => 'John Doe', 'role' => 'Réalisateur', 'image' => 'https://i.pravatar.cc/150?u=John+Doe'],
+            ['name' => 'Jane Doe', 'role' => 'Acteur', 'image' => 'https://i.pravatar.cc/150?u=Jane+Doe'],
+            ['name' => 'Foo Bar', 'role' => 'Acteur', 'image' => 'https://i.pravatar.cc/150?u=Foo+Bar'],
+            ['name' => 'Baz Qux', 'role' => 'Acteur', 'image' => 'https://i.pravatar.cc/150?u=Baz+Qux'],
+            ['name' => 'Alice Bob', 'role' => 'Acteur', 'image' => 'https://i.pravatar.cc/150?u=Alice+Bob'],
+            ['name' => 'Charlie Delta', 'role' => 'Acteur', 'image' => 'https://i.pravatar.cc/150?u=Charlie+Delta'],
+            ['name' => 'Eve Fox', 'role' => 'Acteur', 'image' => 'https://i.pravatar.cc/150?u=Eve+Fox'],
+            ['name' => 'Grace Hope', 'role' => 'Acteur', 'image' => 'https://i.pravatar.cc/150?u=Grace+Hope'],
+            ['name' => 'Ivy Jack', 'role' => 'Acteur', 'image' => 'https://i.pravatar.cc/150?u=Ivy+Jack'],
+        ];
+
+        $staff = [];
+        for ($i = 0; $i < random_int(2, 5); $i++) {
+            $staff[] = $staffData[array_rand($staffData)];
         }
 
-        return $users;
+        $media->setStaff($staff);
+
+        $casting = [];
+        for ($i = 0; $i < random_int(3, 5); $i++) {
+            $casting[] = $castingData[array_rand($castingData)];
+        }
+
+        $media->setCasting($casting);
     }
 }
