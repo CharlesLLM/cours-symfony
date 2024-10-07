@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Repository\CategoryRepository;
+use App\Repository\MediaRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -11,8 +13,13 @@ use Symfony\Component\Routing\Attribute\Route;
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'homepage')]
-    public function __invoke(): Response
+    public function __invoke(MediaRepository $repository): Response
     {
-        return $this->render('index.html.twig');
+        $lastWatched = $repository->findOneBy([], ['id' => 'DESC']);
+
+        return $this->render('index.html.twig', [
+            'medias' => $repository->findAll(),
+            'lastWatched' => $lastWatched,
+        ]);
     }
 }

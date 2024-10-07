@@ -13,6 +13,8 @@ class MyListController extends AbstractController
     #[Route('/lists', name: 'show_my_list')]
     public function discover_category(): Response
     {
-        return $this->render('lists.html.twig');
+        return $this->render('lists.html.twig', [
+            'movies' => [],
+        ]);
     }
 }
