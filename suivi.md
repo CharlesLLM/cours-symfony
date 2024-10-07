@@ -5,10 +5,13 @@
 - Structure des dossier
 - Ce qu'est un controller + premier controller + première route + paramètres simple + retourner une vue + ajouter un parametre à la vue
 
-> Créer ses propres routes/controllers pour afficher les pages des templates
+> Créer ses propres routes/controllers pour afficher les pages des templates 
 
-- Utiliser des sous templates avec Twig
-- Créer des entités avec le CLI de Symfony
+- Utiliser des sous templates avec Twig 
+- Créer des entités avec le CLI de Symfony 
 - Relations et héritages entre entités
 - Migrations
 - Fixtures
+
+- Injection des entités et templating (affichage & boucles for)
+- Utiliser/injecter un repository
