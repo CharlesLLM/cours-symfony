@@ -60,10 +60,24 @@
                 </div>
 
                 <div class="relative w-full flex text-gray-700 font-medium">
-                    <select class="appearance-none w-full bg-white border border-gray-200 px-7 py-3 rounded-md shadow transition">
-                        <option>#1 - Ma liste custom (43 films & 12 séries)</option>
-                        <option>#2 - Film aviations (14 films & 29 séries)</option>
-                        <option>#3 - Film a voir avec les potos (14 films & 10 séries) - Liste de John Doe</option>
+                    <select id="choosePlaylistSelector" class="appearance-none w-full bg-white border border-gray-200 px-7 py-3 rounded-md shadow transition">
+                        <option value="null">Selectionner une playlist</option>
+                        {% set index = 1 %}
+
+                        {% for playlist in myPlaylists %}
+                            <option
+                                    {% if selectedPlaylist and playlist.id == selectedPlaylist.id %} selected {% endif %}
+                                    value="{{ playlist.id }}"
+                            >#{{ index }} - {{ playlist.name }} (XX films & XX séries)</option>
+                            {% set index = index + 1 %}
+                        {% endfor %}
+
+                        {% for subscribedPlaylist in subscribedPlaylists %}
+                            <option
+                                    {% if selectedPlaylist and subscribedPlaylist.id == selectedPlaylist.id %} selected {% endif %}
+                                    value="{{ subscribedPlaylist.id }}">#{{ index }} - {{ subscribedPlaylist.name }} (XX films & XX séries) - Liste de {{ subscribedPlaylist.creator.username }}</option>
+                            {% set index = index + 1 %}
+                        {% endfor %}
                     </select>
                     <div class="pointer-events-none absolute right-2 inset-y-0 flex items-center px-2">
                         <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>chevron-down-circle</title><path d="M22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12M6,10L12,16L18,10L16.6,8.6L12,13.2L7.4,8.6L6,10Z" /></svg>
@@ -72,26 +86,36 @@
             </div>
         </section>
 
-        <section class="mt-9">
-            <ul class="grid grid-cols-2 gap-y-5 sm:grid-cols-3 gap-x-5">
-                {% for movie in movies %}
-                    {% include 'parts/pages/movies/movie_card.html.twig' %}
-                {% endfor %}
-            </ul>
-            <button class="flex flex-col items-center mt-9 w-full">
-                <div class="relative flex w-full bg-red-600 flex-row p-3 items-center justify-center rounded-lg overflow-hidden border cursor-pointer transition hover:bg-red-700 text-white">
-                    <span class="font-bold mr-2">
-                        <svg class="h-6 w-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>plus-circle</title><path d="M17,13H13V17H11V13H7V11H11V7H13V11H17M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg>
-                    </span>
-                    <span class="capitalize font-medium text-md">Charger + de films</span>
-                </div>
-            </button>
-        </section>
+        {% if selectedPlaylist %}
+            <section class="mt-9">
+                <ul class="grid grid-cols-2 gap-y-5 sm:grid-cols-3 gap-x-5">
+                        {% for playlistMedia in selectedPlaylist.playlistMedia %}
+                            {% set media = playlistMedia.media %}
+                            {% include 'parts/pages/movies/movie_card.html.twig' %}
+                        {% endfor %}
+
+                </ul>
+                <button id="loadMoreFilmsButton" class="flex flex-col items-center mt-9 w-full">
+                    <div class="relative flex w-full bg-red-600 flex-row p-3 items-center justify-center rounded-lg overflow-hidden border cursor-pointer transition hover:bg-red-700 text-white">
+                        <span class="font-bold mr-2">
+                            <svg class="h-6 w-6" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>plus-circle</title><path d="M17,13H13V17H11V13H7V11H11V7H13V11H17M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg>
+                        </span>
+                        <span class="capitalize font-medium text-md">Charger + de films</span>
+                    </div>
+                </button>
+            </section>
+        {% endif %}
     </main>
 
     {% include 'parts/structure/right-sidebar.html.twig' %}
 </div>
 
+<script>
+    const choosePlaylistSelector = document.getElementById('choosePlaylistSelector');
+    choosePlaylistSelector.addEventListener('change', (e) => {
+        window.location.href = "{{ path('show_my_list') }}" + '?playlist=' + e.target.value;
+    });
+</script>
 </body>
 
 </html>

@@ -13,5 +13,5 @@
 - Migrations
 - Fixtures
 
-- Injection des entités et templating (affichage & boucles for)
-- Utiliser/injecter un repository
+- Injection des entités et templating (affichage, boucles for, conditions)
+- Utiliser/injecter un repository, query builder (basiques)
