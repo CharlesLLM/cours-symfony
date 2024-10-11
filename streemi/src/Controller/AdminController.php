@@ -8,11 +8,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class SubscriptionController extends AbstractController
+class AdminController extends AbstractController
 {
-    #[Route('/subscriptions', name: 'subscriptions')]
-    public function listSubscriptions(): Response
+    #[Route('/admin', name: 'admin')]
+    public function index(): Response
     {
-        return $this->render('abonnements.html.twig');
+        return $this->render('admin/admin.html.twig', [
+        ]);
     }
 }

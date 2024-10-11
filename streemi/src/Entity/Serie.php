@@ -54,4 +54,9 @@ class Serie extends Media
 
         return $this;
     }
+
+    public function getMediaType(): string
+    {
+        return 'Serie';
+    }
 }

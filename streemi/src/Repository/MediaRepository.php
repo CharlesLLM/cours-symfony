@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Category;
 use App\Entity\Media;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -16,20 +17,25 @@ class MediaRepository extends ServiceEntityRepository
         parent::__construct($registry, Media::class);
     }
 
-//    /**
-//     * @return Media[] Returns an array of Media objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('m.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return Media[] Returns an array of Media objects
+     */
+    public function findTrendingMedias(int $maximumElements = 9, Category $category = null): array
+    {
+        $query = $this->createQueryBuilder('m')
+            ->orderBy('m.releaseDate', 'DESC')
+            ->setMaxResults($maximumElements);
+        ;
+
+        if ($category) {
+            $query->join('m.categories', 'c')
+                ->andWhere('c.id = :category')
+                ->setParameter('category', $category->getId());
+        }
+
+        return $query->getQuery()
+            ->getResult();
+    }
 
 //    public function findOneBySomeField($value): ?Media
 //    {

@@ -14,3 +14,20 @@
 - Fixtures
 
 - Injection des entités et templating (affichage & boucles for)
+
+
+
+
+
+
+- Création de la page d'accueil avec un repository pour récupérer les meilleurs films 
+- Page de détail d'un film/série avec une condition sur le type pour afficher ou non certaines informations
+- Modification du menu pour ajouter les liens, et pour afficher le bon menu en fonction de la page
+ 
+- Page pour voir la page discover et une catégorie
+- Page pour voir les abonnements
+- Page admin pour lister les films et séries
+
+TODO :
+- pagination
+- Page pour gérer le formulaire d'inscription et d'ajout de film

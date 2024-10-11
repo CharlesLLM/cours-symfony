@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\CommentStatusEnum;
 use App\Repository\MediaRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -94,6 +95,13 @@ class Media
     public function getComments(): Collection
     {
         return $this->comments;
+    }
+
+    public function getValidatedComments(): Collection
+    {
+        return $this->comments->filter(static function(Comment $comment) {
+            return $comment->getStatus() === CommentStatusEnum::VALID;
+        });
     }
 
     public function addComment(Comment $comment): static
@@ -308,5 +316,10 @@ class Media
         $this->casting = $casting;
 
         return $this;
+    }
+
+    public function getMediaType(): string
+    {
+        return 'media';
     }
 }

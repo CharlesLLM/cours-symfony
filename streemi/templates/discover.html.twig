@@ -59,9 +59,9 @@
                 </div>
             </div>
             <ul class="mt-4 grid grid-cols-2 gap-y-5 sm:grid-cols-3 gap-x-5 ">
-                {% include 'parts/pages/homepage_card.html.twig' %}
-                {% include 'parts/pages/homepage_card.html.twig' %}
-                {% include 'parts/pages/homepage_card.html.twig' %}
+                {% for media in medias %}
+                    {% include 'parts/pages/homepage_card.html.twig' %}
+                {% endfor %}
             </ul>
         </section>
         <section class="mt-9">
@@ -69,10 +69,9 @@
                 <span class="font-semibold text-gray-700 text-base">Recommandations par catégories</span>
             </div>
             <div class="mt-4 grid grid-cols-2 gap-y-5 sm:grid-cols-3 gap-x-5">
-                {% include 'parts/pages/categories/card_category.html.twig' %}
-                {% include 'parts/pages/categories/card_category.html.twig' %}
-                {% include 'parts/pages/categories/card_category.html.twig' %}
-                {% include 'parts/pages/categories/card_category.html.twig' %}
+                {% for category in categories %}
+                    {% include 'parts/pages/categories/card_category.html.twig' %}
+                {% endfor %}
             </div>
         </section>
 

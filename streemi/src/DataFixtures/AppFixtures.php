@@ -10,6 +10,7 @@ use App\Entity\Media;
 use App\Entity\Movie;
 use App\Entity\Playlist;
 use App\Entity\PlaylistMedia;
+use App\Entity\PlaylistSubscription;
 use App\Entity\Season;
 use App\Entity\Serie;
 use App\Entity\Subscription;
@@ -28,12 +29,13 @@ class AppFixtures extends Fixture
     public const MAX_SEASONS = 3;
     public const MAX_EPISODES = 10;
 
-    public const PLAYLISTS_PER_USER = 5;
+    public const PLAYLISTS_PER_USER = 3;
     public const MAX_MEDIA_PER_PLAYLIST = 3;
     public const MAX_LANGUAGE_PER_MEDIA = 3;
     public const MAX_CATEGORY_PER_MEDIA = 3;
     public const MAX_SUBSCRIPTIONS_HISTORY_PER_USER = 3;
     public const MAX_COMMENTS_PER_MEDIA = 10;
+    public const MAX_PLAYLIST_SUBSCRIPTION_PER_USERS = 3;
 
     public function load(ObjectManager $manager): void
     {
@@ -57,23 +59,37 @@ class AppFixtures extends Fixture
         $this->linkMediaToCategories($medias, $categories);
         $this->linkMediaToLanguages($medias, $languages);
 
+        $this->addUserPlaylistSubscriptions($manager, $users, $playlists);
+
         $manager->flush();
     }
 
     protected function createSubscriptions(ObjectManager $manager, array &$users, array &$subscriptions): void
     {
-        for ($m = 0; $m < self::MAX_SUBSCRIPTIONS; $m++) {
-            $duration = 10 * ($m + 1);
+        $array = [
+            ['name' => 'Abonnement 1 mois - HD', 'duration' => 1, 'price' => 3],
+            ['name' => 'Abonnement 3 mois - HD', 'duration' => 3, 'price' => 8],
+            ['name' => 'Abonnement 6 mois - HD', 'duration' => 6, 'price' => 15],
+            ['name' => 'Abonnement 1 an - HD', 'duration' => 12, 'price' => 25],
+            ['name' => 'Abonnement 1 mois - 4K HDR', 'duration' => 1, 'price' => 6],
+            ['name' => 'Abonnement 3 mois - 4K HDR', 'duration' => 3, 'price' => 15],
+            ['name' => 'Abonnement 6 mois - 4K HDR', 'duration' => 6, 'price' => 30],
+            ['name' => 'Abonnement 1 an - 4K HDR', 'duration' => 12, 'price' => 50],
 
+        ];
+
+        foreach ($array as $element) {
             $abonnement = new Subscription();
-            $abonnement->setDuration(duration: $duration);
-            $abonnement->setName(name: "Abonnement {$duration} jours");
-            $abonnement->setPrice(price: 50);
-            $manager->persist(object: $abonnement);
+            $abonnement->setDuration($element['duration']);
+            $abonnement->setName($element['name']);
+            $abonnement->setPrice($element['price']);
+            $manager->persist($abonnement);
             $subscriptions[] = $abonnement;
 
-            $randomUser = $users[array_rand($users)];
-            $randomUser->setCurrentSubscription(currentSubscription: $abonnement);
+            for ($i = 0; $i < random_int(1, self::MAX_SUBSCRIPTIONS); $i++) {
+                $randomUser = $users[array_rand($users)];
+                $randomUser->setCurrentSubscription(currentSubscription: $abonnement);
+            }
         }
     }
 
@@ -97,9 +113,9 @@ class AppFixtures extends Fixture
                 $this->createSeasons($manager, $media);
             }
 
-//            if ($media instanceof Movie) {
+            if ($media instanceof Movie) {
 //                $media->setDuration(duration: random_int(60, 180));
-//            }
+            }
         }
     }
 
@@ -318,5 +334,19 @@ class AppFixtures extends Fixture
         }
 
         $media->setCasting($casting);
+    }
+
+    protected function addUserPlaylistSubscriptions(ObjectManager $manager, array $users, array $playlists): void
+    {
+        /** @var User $user */
+        foreach ($users as $user) {
+            for ($i = 0; $i < random_int(0, self::MAX_PLAYLIST_SUBSCRIPTION_PER_USERS); $i++) {
+                $subscription = new PlaylistSubscription();
+                $subscription->setSubscriber($user);
+                $subscription->setPlaylist($playlists[array_rand($playlists)]);
+                $subscription->setSubscribedAt(new \DateTimeImmutable());
+                $manager->persist($subscription);
+            }
+        }
     }
 }

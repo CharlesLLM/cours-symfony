@@ -11,4 +11,8 @@ use Doctrine\ORM\Mapping\Entity;
 #[Entity(repositoryClass: MovieRepository::class)]
 class Movie extends Media
 {
+    public function getMediaType(): string
+    {
+        return 'Movie';
+    }
 }
