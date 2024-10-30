@@ -3,7 +3,15 @@
 ## Contraintes du projet : 
 
 > Sujet libre !
+
 > Groupe de 1 | 2 | 3
+
+### Documentation :
+
+- Un cahier des charges
+- Un schéma de la BDD
+- Des fixtures 
+- Un guide (readme) pour installer le projet en local, le démarrer, les comptes de tests, process de validation ...
 
 ### Entités :
 - Au minimum 10 entités avec de l'héritage d'entité
@@ -24,7 +32,8 @@
 - Avoir un minimum 1 test unitaire et 1 test fonctionnel 
 - Avoir des requêtes personnalisées avec des query builder dans des repositories
 - Utiliser des forms dynamiques
-
+- Avoir un espace admin
+- Minimum 10 pages différentes
 
 ### CI/CD : 
 - Projet déployé
