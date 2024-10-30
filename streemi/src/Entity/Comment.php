@@ -32,9 +32,9 @@ class Comment
     #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parentComment')]
     private Collection $childComments;
 
-    #[ORM\ManyToOne(inversedBy: 'comments')]
+    #[ORM\ManyToOne(inversedBy: 'comments2')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $publisher = null;
+    private ?User $author = null;
 
     public function __construct()
     {
@@ -112,14 +112,14 @@ class Comment
         return $this;
     }
 
-    public function getPublisher(): ?User
+    public function getAuthor(): ?User
     {
-        return $this->publisher;
+        return $this->author;
     }
 
-    public function setPublisher(?User $publisher): static
+    public function setAuthor(?User $author): static
     {
-        $this->publisher = $publisher;
+        $this->author = $author;
 
         return $this;
     }
