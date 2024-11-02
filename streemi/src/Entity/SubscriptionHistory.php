@@ -24,6 +24,7 @@ class SubscriptionHistory
     private ?User $subscriber = null;
 
     #[ORM\ManyToOne(inversedBy: 'subscriptionHistories')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Subscription $subscription = null;
 
     public function getId(): ?int

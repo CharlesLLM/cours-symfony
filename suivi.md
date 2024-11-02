@@ -15,21 +15,17 @@ Cours du 30 octobre 2024 :
 - Heritage d'entités
 - Migrations
 
+Cours du 02 nomvembre 2024 :
 
-
-
-
-
-
-
-
-
-- Fin des fixtures
+- Fixtures
 - Point sur ce que sont les services, l'autowiring et l'autoconfiguration
+
+A suivre : 
+
 - Injection des repositories dans les controlelrs
 - Injection des entités dans les controllers
-
 - Création d'une requête personnalisée dans un repositorie
 - Création de formulaire, affichage dans le twig
 - Validation des données
 - Modification des données 
+- Authentification
