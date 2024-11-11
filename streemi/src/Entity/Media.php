@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping\InheritanceType;
 #[InheritanceType('JOINED')]
 #[DiscriminatorColumn(name: 'mediaType', type: 'string')]
 #[DiscriminatorMap(['movie' => Movie::class, 'serie' => Serie::class])]
-class Media
+abstract class Media
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -311,4 +311,6 @@ class Media
 
         return $this;
     }
+
+    abstract public function getMediaType(): string;
 }

@@ -18,6 +18,7 @@ use App\Entity\SubscriptionHistory;
 use App\Entity\User;
 use App\Enum\CommentStatusEnum;
 use App\Enum\UserAccountStatusEnum;
+use App\Enum\UserRoleEnum;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -38,6 +39,8 @@ class AppFixtures extends Fixture
     public const MAX_SUBSCRIPTIONS_HISTORY_PER_USER = 3;
     public const MAX_COMMENTS_PER_MEDIA = 10;
     public const MAX_PLAYLIST_SUBSCRIPTION_PER_USERS = 3;
+
+    public const DEFAULT_PASSWORD = 'motdepasse';
 
     public function load(ObjectManager $manager): void
     {
@@ -68,14 +71,14 @@ class AppFixtures extends Fixture
     protected function createSubscriptions(ObjectManager $manager, array $users, array &$subscriptions): void
     {
         $array = [
-            ['name' => 'Abonnement 1 mois - HD', 'duration' => 1, 'price' => 3],
-            ['name' => 'Abonnement 3 mois - HD', 'duration' => 3, 'price' => 8],
-            ['name' => 'Abonnement 6 mois - HD', 'duration' => 6, 'price' => 15],
-            ['name' => 'Abonnement 1 an - HD', 'duration' => 12, 'price' => 25],
-            ['name' => 'Abonnement 1 mois - 4K HDR', 'duration' => 1, 'price' => 6],
-            ['name' => 'Abonnement 3 mois - 4K HDR', 'duration' => 3, 'price' => 15],
-            ['name' => 'Abonnement 6 mois - 4K HDR', 'duration' => 6, 'price' => 30],
-            ['name' => 'Abonnement 1 an - 4K HDR', 'duration' => 12, 'price' => 50],
+            ['name' => 'Abonnement 1 mois - HD', 'duration' => 1, 'price' => 3, 'description' => 'Description de Abonnement 1 mois - HD', 'info' => 'Info AAA'],
+            ['name' => 'Abonnement 3 mois - HD', 'duration' => 3, 'price' => 8, 'description' => 'Description de Abonnement 3 mois - HD', 'info' => 'Info BBB'],
+            ['name' => 'Abonnement 6 mois - HD', 'duration' => 6, 'price' => 15, 'description' => 'Description de Abonnement 6 mois - HD', 'info' => 'Info CCC'],
+            ['name' => 'Abonnement 1 an - HD', 'duration' => 12, 'price' => 25, 'description' => 'Description de Abonnement 1 an - HD', 'info' => 'Info DDD'],
+            ['name' => 'Abonnement 1 mois - 4K HDR', 'duration' => 1, 'price' => 6, 'description' => 'Description de Abonnement 1 mois - 4K HDR', 'info' => 'Info EEE'],
+            ['name' => 'Abonnement 3 mois - 4K HDR', 'duration' => 3, 'price' => 15, 'description' => 'Description de Abonnement 3 mois - 4K HDR', 'info' => 'Info FFF'],
+            ['name' => 'Abonnement 6 mois - 4K HDR', 'duration' => 6, 'price' => 30, 'description' => 'Description de Abonnement 6 mois - 4K HDR', 'info' => 'Info GGG'],
+            ['name' => 'Abonnement 1 an - 4K HDR', 'duration' => 12, 'price' => 50, 'description' => 'Description de Abonnement 1 an - 4K HDR', 'info' => 'Info HHH'],
 
         ];
 
@@ -84,6 +87,8 @@ class AppFixtures extends Fixture
             $abonnement->setDuration(duration: $element['duration']);
             $abonnement->setName(name: $element['name']);
             $abonnement->setPrice(price: $element['price']);
+            $abonnement->setDescription(description: $element['description']);
+            $abonnement->setInfo(info: $element['info']);
             $manager->persist(object: $abonnement);
             $subscriptions[] = $abonnement;
 
@@ -126,12 +131,28 @@ class AppFixtures extends Fixture
             $user = new User();
             $user->setEmail(email: "test_$i@example.com");
             $user->setUsername(username: "test_$i");
-            $user->setPassword(password: 'coucou');
+            $user->setPlainPassword(plainPassword: self::DEFAULT_PASSWORD);
             $user->setAccountStatus(accountStatus: UserAccountStatusEnum::ACTIVE);
             $users[] = $user;
 
             $manager->persist(object: $user);
         }
+
+        $admin = new User();
+        $admin->setEmail(email: 'admin@example.com');
+        $admin->setUsername(username: 'admin');
+        $admin->setPlainPassword(plainPassword: self::DEFAULT_PASSWORD);
+        $admin->setAccountStatus(accountStatus: UserAccountStatusEnum::ACTIVE);
+        $admin->addRole(role: UserRoleEnum::ROLE_ADMIN->value);
+        $manager->persist(object: $admin);
+
+        $normal = new User();
+        $normal->setEmail(email: 'normal@example.com');
+        $normal->setUsername(username: 'normal');
+        $normal->setPlainPassword(plainPassword: self::DEFAULT_PASSWORD);
+        $normal->setAccountStatus(accountStatus: UserAccountStatusEnum::ACTIVE);
+        $manager->persist(object: $normal);
+        $users[] = $normal;
     }
 
     public function createPlaylists(ObjectManager $manager, array $users, array &$playlists): void
@@ -153,12 +174,12 @@ class AppFixtures extends Fixture
     protected function createCategories(ObjectManager $manager, array &$categories): void
     {
         $array = [
-            ['nom' => 'Action', 'label' => 'Action'],
-            ['nom' => 'Comédie', 'label' => 'Comédie'],
-            ['nom' => 'Drame', 'label' => 'Drame'],
-            ['nom' => 'Horreur', 'label' => 'Horreur'],
-            ['nom' => 'Science-fiction', 'label' => 'Science-fiction'],
-            ['nom' => 'Thriller', 'label' => 'Thriller'],
+            ['nom' => 'action', 'label' => 'Action'],
+            ['nom' => 'comedie', 'label' => 'Comédie'],
+            ['nom' => 'drame', 'label' => 'Drame'],
+            ['nom' => 'horreur', 'label' => 'Horreur'],
+            ['nom' => 'sci-fi', 'label' => 'Science-fiction'],
+            ['nom' => 'thriller', 'label' => 'Thriller'],
         ];
 
         foreach ($array as $element) {
@@ -209,6 +230,9 @@ class AppFixtures extends Fixture
             $episode->setDuration(duration: random_int(min: 10, max: 60));
             $episode->setReleasedAt(releasedAt: new DateTimeImmutable());
             $episode->setSeason(season: $season);
+
+            $faker = \Faker\Factory::create('fr_FR');
+            $episode->setDescription(description: $faker->text(maxNbChars: 200));
 
             $manager->persist(object: $episode);
         }

@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: PlaylistRepository::class)]
 class Playlist
@@ -41,10 +42,14 @@ class Playlist
     #[ORM\OneToMany(targetEntity: PlaylistMedia::class, mappedBy: 'playlist')]
     private Collection $playlistMedia;
 
+    #[ORM\Column(length: 255)]
+    private ?string $uuid = null;
+
     public function __construct()
     {
         $this->playlistSubscriptions = new ArrayCollection();
         $this->playlistMedia = new ArrayCollection();
+        $this->uuid = Uuid::v4()->toString();
     }
 
     public function getId(): ?int
@@ -156,6 +161,18 @@ class Playlist
                 $playlistMedium->setPlaylist(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUuid(): ?string
+    {
+        return $this->uuid;
+    }
+
+    public function setUuid(string $uuid): static
+    {
+        $this->uuid = $uuid;
 
         return $this;
     }

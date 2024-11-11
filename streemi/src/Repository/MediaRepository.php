@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Category;
 use App\Entity\Media;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -16,28 +17,27 @@ class MediaRepository extends ServiceEntityRepository
         parent::__construct($registry, Media::class);
     }
 
-//    /**
-//     * @return Media[] Returns an array of Media objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('m.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findPopular(int $limit)
+    {
+        return $this->createQueryBuilder('m')
+            ->select('m, COUNT(p) as HIDDEN count')
+            ->leftJoin('m.playlistMedia', 'p')
+            ->groupBy('m')
+            ->orderBy('count', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 
-//    public function findOneBySomeField($value): ?Media
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findMediasByCategory(Category $currentCategory, int $limit = 10)
+    {
+        return $this->createQueryBuilder('m')
+            ->select('m')
+            ->leftJoin('m.categories', 'c')
+            ->where('c.id = :id')
+            ->setParameter('id', $currentCategory->getId())
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }

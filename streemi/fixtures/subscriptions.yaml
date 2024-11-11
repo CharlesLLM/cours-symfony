@@ -3,22 +3,32 @@ App\Entity\Subscription:
     name: 'Abonnement mensuel'
     price: 999
     duration: 1
+    description: 'Abonnement mensuel à 9,99€'
+    info: 'Le moins cher'
   subscription_annual:
     name: 'Abonnement annuel'
     price: 9999
     duration: 12
+    description: 'Abonnement annuel à 99,99€'
+    info: 'Le plus populaire'
   subscription_lifetime:
     name: 'Abonnement à vie'
     price: 99999
     duration: 9999
+    description: 'Abonnement à vie à 999,99€'
+    info: 'A vie !!'
   subscription_3_months:
     name: 'Abonnement 3 mois'
     price: 2999
     duration: 3
+    description: 'Abonnement 3 mois à 29,99€'
+    info: 'Le plus pratique'
   subscription_6_months:
     name: 'Abonnement 6 mois'
     price: 5999
     duration: 6
+    description: 'Abonnement 6 mois à 59,99€'
+    info: 'Le plus économique'
 
 App\Entity\SubscriptionHistory:
   sub_history:

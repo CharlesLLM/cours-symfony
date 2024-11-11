@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\MediaTypeEnum;
 use App\Repository\SerieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -50,5 +51,10 @@ class Serie extends Media
         }
 
         return $this;
+    }
+
+    public function getMediaType(): string
+    {
+        return MediaTypeEnum::TV_SHOW->value;
     }
 }

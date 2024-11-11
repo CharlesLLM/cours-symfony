@@ -10,8 +10,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class AdminController extends AbstractController
 {
-    // admin.html.twig, admin_add_films.html.twig, admin_films.html.twig, admin_users.html.twig
-
     #[Route(path: '/admin', name: 'page_admin')]
     public function admin(): Response
     {
