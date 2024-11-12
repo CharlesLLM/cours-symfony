@@ -10,9 +10,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class MyListController extends AbstractController
 {
+    #[IsGranted('ROLE_USER')]
     #[Route('/lists', name: 'page_lists')]
     public function discover_category(
         PlaylistRepository $playlistRepository,

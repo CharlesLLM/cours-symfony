@@ -83,6 +83,7 @@ class AppFixtures extends Fixture
             $abonnement->setDuration($element['duration']);
             $abonnement->setName($element['name']);
             $abonnement->setPrice($element['price']);
+            $abonnement->setDescription('Description de l\'abonnement');
             $manager->persist($abonnement);
             $subscriptions[] = $abonnement;
 
@@ -125,12 +126,28 @@ class AppFixtures extends Fixture
             $user = new User();
             $user->setEmail(email: "test_{$i}@example.com");
             $user->setUsername(username: "test_{$i}");
-            $user->setPassword(password: 'coucou');
+            $user->setPassword(password: 'motdepasse');
             $user->setAccountStatus(UserStatusEnum::ACTIVE);
             $users[] = $user;
 
             $manager->persist(object: $user);
         }
+
+        $admin = new User();
+        $admin->setEmail(email: "admin@example.com");
+        $admin->setUsername(username: "admin");
+        $admin->setPassword('motdepasse');
+        $admin->setAccountStatus(UserStatusEnum::ACTIVE);
+        $admin->addRole('ROLE_ADMIN');
+        $manager->persist($admin);
+
+        $normal = new User();
+        $normal->setEmail(email: "demo@example.com");
+        $normal->setUsername(username: "demo");
+        $normal->setPassword('motdepasse');
+        $normal->setAccountStatus(UserStatusEnum::ACTIVE);
+        $normal->addRole('ROLE_USER');
+        $manager->persist($normal);
     }
 
     public function createPlaylists(ObjectManager $manager, array &$users, array &$playlists): void

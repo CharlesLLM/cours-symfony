@@ -6,11 +6,14 @@ use App\Enum\UserStatusEnum;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\JsonType;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -61,6 +64,12 @@ class User
      */
     #[ORM\OneToMany(targetEntity: WatchHistory::class, mappedBy: 'watcher')]
     private Collection $watchHistories;
+
+    #[ORM\Column]
+    private array $roles = [];
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $resetToken = null;
 
     public function __construct()
     {
@@ -282,6 +291,63 @@ class User
                 $watchHistory->setWatcher(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function addRole(string $role): static
+    {
+        if (!in_array($role, $this->roles, true)) {
+            $this->roles[] = $role;
+        }
+
+        return $this;
+    }
+
+    public function removeRole(string $role): static
+    {
+        if (false !== $key = array_search($role, $this->roles, true)) {
+            unset($this->roles[$key]);
+        }
+
+        return $this;
+    }
+
+    public function eraseCredentials(): void
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->email;
+    }
+
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    public function setResetToken(?string $resetToken): static
+    {
+        $this->resetToken = $resetToken;
 
         return $this;
     }

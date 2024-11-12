@@ -23,15 +23,18 @@ class MediaRepository extends ServiceEntityRepository
     public function findTrendingMedias(int $maximumElements = 9, Category $category = null): array
     {
         $query = $this->createQueryBuilder('m')
-            ->orderBy('m.releaseDate', 'DESC')
-            ->setMaxResults($maximumElements);
+            ->setMaxResults($maximumElements)
+            // find trending medias (criteria : mostly added to playlists)
+            ->innerJoin('m.playlistMedia', 'p')
+            ->groupBy('m.id')
+            ->orderBy('COUNT(p.id)', 'DESC')
         ;
 
-        if ($category) {
-            $query->join('m.categories', 'c')
-                ->andWhere('c.id = :category')
-                ->setParameter('category', $category->getId());
-        }
+//        if ($category) {
+//            $query->join('m.categories', 'c')
+//                ->andWhere('c.id = :category')
+//                ->setParameter('category', $category->getId());
+//        }
 
         return $query->getQuery()
             ->getResult();
