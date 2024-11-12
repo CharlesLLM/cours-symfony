@@ -32,4 +32,17 @@ class MediaRepository extends ServiceEntityRepository
             ->getResult();
 
     }
+
+    public function findPopular()
+    {
+        // a popular media is a media that has often been added to playlists
+        return $this->createQueryBuilder('m')
+            ->select('m, COUNT(p) as HIDDEN nbPlaylists')
+            ->join('m.playlistMedia', 'p')
+            ->groupBy('m')
+            ->orderBy('nbPlaylists', 'DESC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+    }
 }

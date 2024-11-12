@@ -12,11 +12,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class MyListController extends AbstractController
 {
+    #[IsGranted('ROLE_USER')]
     #[Route('/lists', name: 'show_my_list')]
-    public function myLists(UserRepository $repository, Request $request, PlaylistRepository $playlistRepository): Response
+    public function myLists(
+        UserRepository $repository,
+        Request $request,
+        PlaylistRepository $playlistRepository
+    ): Response
     {
         $playlistId = $request->query->get('playlist');
         if ($playlistId) {

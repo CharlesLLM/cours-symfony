@@ -18,7 +18,7 @@ class HomeController extends AbstractController
         $lastWatched = $repository->findOneBy([], ['id' => 'DESC']);
 
         return $this->render('index.html.twig', [
-            'medias' => $repository->findAll(),
+            'medias' => $repository->findPopular(),
             'lastWatched' => $lastWatched,
         ]);
     }

@@ -15,3 +15,12 @@
 
 - Injection des entités et templating (affichage, boucles for, conditions)
 - Utiliser/injecter un repository, query builder (basiques)
+
+# Cours du 12 novembre
+
+- Revision sur les entités, les relations, les migrations et les fixtures
+- QueryBuilder
+- Injection des entités et templating (affichage, boucles for, conditions)
+- Présentation projet de fin de formation
+- Authentification (login, logout, forgot, reset)
+- Formulaires basiques (CRUD)

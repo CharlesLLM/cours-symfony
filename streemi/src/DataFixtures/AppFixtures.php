@@ -131,6 +131,22 @@ class AppFixtures extends Fixture
 
             $manager->persist(object: $user);
         }
+
+        $admin = new User();
+        $admin->setEmail('admin@example.com');
+        $admin->setUsername('Baptiste');
+        $admin->setPassword('motdepasse');
+        $admin->addRole('ROLE_ADMIN');
+        $admin->setAccountStatus(UserAccountStatusEnum::ACTIVE);
+        $manager->persist($admin);
+
+        $normal = new User();
+        $normal->setEmail('normal@example.com');
+        $normal->setUsername('John');
+        $normal->setPassword('motdepasse');
+        $normal->addRole('ROLE_PTITE_MERDE');
+        $normal->setAccountStatus(UserAccountStatusEnum::ACTIVE);
+        $manager->persist($normal);
     }
 
     public function createPlaylists(ObjectManager $manager, array &$users, array &$playlists): void
