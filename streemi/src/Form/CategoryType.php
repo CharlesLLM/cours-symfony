@@ -16,11 +16,11 @@ class CategoryType extends AbstractType
         $builder
             ->add('nom')
             ->add('label')
-            ->add('medias', EntityType::class, [
-                'class' => Media::class,
-                'choice_label' => 'title',
-                'multiple' => true,
-            ])
+//            ->add('medias', EntityType::class, [
+//                'class' => Media::class,
+//                'choice_label' => 'title',
+//                'multiple' => true,
+//            ])
         ;
     }
 
