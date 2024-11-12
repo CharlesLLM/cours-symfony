@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class MyListController extends AbstractController
 {
-    #[Route('/lists', name: 'show_my_list')]
+    #[Route('/lists', name: 'page_lists')]
     public function discover_category(
         PlaylistRepository $playlistRepository,
         PlaylistSubscriptionRepository $playlistSubscriptionRepository,
@@ -22,7 +22,11 @@ class MyListController extends AbstractController
     {
         $rcaca = $request->query->get('playlist');
 
-        $currentPlaylist = $playlistRepository -> find($rcaca);
+        if ($rcaca) {
+            $currentPlaylist = $playlistRepository -> find($rcaca);
+        } else {
+            $currentPlaylist = null;
+        }
 
         return $this->render('lists.html.twig',[
             'playlists' => $playlistRepository -> findAll(),
