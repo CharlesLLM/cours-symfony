@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <main class="flex-1 py-10 px-5 sm:px-10">
+        <section>
+            <h1 class="text-lg font-medium text-black">Abonnement <span class="font-bold text-red-600">{{ subscription.name }}</span></h1>
+            <p class="text-gray-400 text-lg mt-3">{{ subscription.description }}</p>
+
+            <div class="mt-6">
+                {% include 'parts/message-flash.html.twig' %}
+            </div>
+
+            <div class="flex items-center font-medium mt-8 bg-gray-100 border border-black/10 rounded-lg px-8 py-4">
+                <svg class="h-5 w-5 fill-current opacity-50 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>information</title><path d="M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg>
+                Votre abonnement actuel : <span class="text-red-600 font-bold ml-2">
+                    {% if currentSubscription %}
+                        {{ currentSubscription.name }}
+                    {% else %}
+                        Aucun
+                    {% endif %}
+                </span>
+            </div>
+
+            <p class="text-lg mt-8">
+                Vous êtes sur le point de vous abonner à l'offre <span class="font-bold text-red-600">{{ subscription.name }}</span> pour <span class="font-bold text-red-600">{{ subscription.price }}€</span>.
+            </p>
+
+            <form action="{{ path('page_subscription_pay', { 'id': subscription.id }) }}" method="POST" class="mt-8">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('pay_subscription') }}">
+                <div class="flex items-center">
+                    <label for="terms" class="text-gray-400">
+                        <input type="checkbox" name="terms" id="terms" class="mr-2" required>
+                        <span class="text-gray-400">J'accepte les <a href="#" class="text-red-600">conditions générales d'utilisation</a></span>
+                    </label>
+                </div>
+
+                <button type="submit" class="mt-8 bg-red-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-red-700 transition">Payer</button>
+            </form>
+
+        </section>
+    </main>
+{% endblock %}

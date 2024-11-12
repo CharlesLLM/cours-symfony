@@ -4,21 +4,17 @@ declare(strict_types=1);
 
 namespace App\Controller\Auth;
 
-use App\Entity\User;
 use App\Form\PasswordResetType;
 use App\Repository\UserRepository;
+use App\Service\Mailer\AuthMailer;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Uid\Uuid;
-use Twig\Environment;
 
 class AuthController extends AbstractController
 {
@@ -51,7 +47,7 @@ class AuthController extends AbstractController
         if ($username) {
             try {
                 $user = $userRepository->findOneBy(['email' => $username]);
-                if ($user) {
+                if (!$user) {
                     $this->addFlash('error', 'Aucun utilisateur trouvé avec cet email');
                 } else {
                     $resetPasswordToken = Uuid::v4()->toRfc4122();
