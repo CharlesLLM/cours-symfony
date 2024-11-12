@@ -110,6 +110,7 @@ class AppFixtures extends Fixture
             $media->setShortDescription(shortDescription: "Short description $j");
             $media->setCoverImage(coverImage: "https://picsum.photos/1920/1080?random=$j");
             $media->setReleaseDate(releaseDate: new DateTime(datetime: "+7 days"));
+            $media->setScore(score: random_int(min: 0, max: 100));
             $manager->persist(object: $media);
             $medias[] = $media;
 
@@ -119,9 +120,9 @@ class AppFixtures extends Fixture
                 $this->createSeasons(manager: $manager, media: $media);
             }
 
-//            if ($media instanceof Movie) {
-//                $media->setDuration(duration: random_int(60, 180));
-//            }
+            if ($media instanceof Movie) {
+                $media->setDuration(duration: random_int(60, 180));
+            }
         }
     }
 
@@ -195,7 +196,7 @@ class AppFixtures extends Fixture
     {
         $array = [
             ['code' => 'fr', 'nom' => 'Français'],
-            ['code' => 'en', 'nom' => 'Anglais'],
+            ['code' => 'us', 'nom' => 'Anglais'],
             ['code' => 'es', 'nom' => 'Espagnol'],
             ['code' => 'de', 'nom' => 'Allemand'],
             ['code' => 'it', 'nom' => 'Italien'],
@@ -285,6 +286,10 @@ class AppFixtures extends Fixture
         foreach ($medias as $media) {
             for ($i = 0; $i < random_int(min: 1, max: self::MAX_LANGUAGE_PER_MEDIA); $i++) {
                 $media->addLanguage(language: $languages[array_rand(array: $languages)]);
+            }
+
+            for ($i = 0; $i < random_int(min: 1, max: self::MAX_LANGUAGE_PER_MEDIA); $i++) {
+                $media->addSubtitle(subtitle: $languages[array_rand(array: $languages)]);
             }
         }
     }

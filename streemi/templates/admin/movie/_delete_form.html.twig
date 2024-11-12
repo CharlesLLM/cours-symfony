@@ -1,0 +1,6 @@
+<form method="post" action="{{ path('page_admin_movie_delete', {'id': movie.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+    <button class="bg-red-600 text-white p-2 rounded-md w-full mt-4 opacity-60 hover:opacity-100 transition" type="submit">
+        &times;
+        Supprimer le film
+    </button>
+</form>

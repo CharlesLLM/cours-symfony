@@ -91,4 +91,15 @@ class Season
 
         return $this;
     }
+
+    public function getDuration(): int
+    {
+        $duration = 0;
+
+        foreach ($this->episodes as $episode) {
+            $duration += $episode->getDuration();
+        }
+
+        return $duration;
+    }
 }

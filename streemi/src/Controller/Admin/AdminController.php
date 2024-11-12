@@ -16,21 +16,9 @@ class AdminController extends AbstractController
         return $this->render(view: 'admin/admin.html.twig');
     }
 
-    #[Route(path: '/admin/movies', name: 'page_admin_movies')]
-    public function films(): Response
-    {
-        return $this->render(view: 'admin/admin_films.html.twig');
-    }
-
-    #[Route(path: '/admin/movies/add', name: 'page_admin_movies_add')]
-    public function addMovies(): Response
-    {
-        return $this->render(view: 'admin/admin_add_films.html.twig');
-    }
-
-    #[Route(path: '/admin/users', name: 'page_admin_users')]
-    public function users(): Response
-    {
-        return $this->render(view: 'admin/admin_users.html.twig');
-    }
+//    #[Route(path: '/admin/users', name: 'page_admin_users')]
+//    public function users(): Response
+//    {
+//        return $this->render(view: 'admin/admin_users.html.twig');
+//    }
 }

@@ -29,9 +29,7 @@ class PasswordResetType extends AbstractType
                 'label' => 'Répéter le mot de passe',
                 'constraints' => [
                     new Assert\NotBlank(),
-                    new Assert\EqualTo(propertyPath: 'plainPassword'),
                 ],
-                'mapped' => false,
             ]);
     }
 

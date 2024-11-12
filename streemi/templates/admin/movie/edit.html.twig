@@ -1,0 +1,20 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Modifier {{ movie.title }}{% endblock %}
+
+{% block admin %}
+    <section>
+        <h1 class="text-lg font-medium text-black mb-9">Modifier <span class="font-bold text-red-600">{{ movie.title }}</span></h1>
+        <a href="{{ path('page_admin_movie_index') }}" class="underline decoration-2 decoration-red-400 hover:text-red-600 inline-flex items-center"><svg class="fill-current h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>arrow-left</title><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"></path></svg> Revenir à la liste des films</a>
+    </section>
+
+    {{ include('admin/movie/_form.html.twig', {'button_label': 'Modifier le film'}) }}
+
+    {{ include('admin/movie/_delete_form.html.twig') }}
+
+    <a href="{{ path('page_admin_movie_index') }}" class="underline decoration-2 decoration-red-400 hover:text-red-600 inline-flex items-center mt-4"><svg class="fill-current h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>arrow-left</title><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"></path></svg> Revenir à la liste des films</a>
+{% endblock %}
+
+
+
+

@@ -1,0 +1,15 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Ajouter une catégorie{% endblock %}
+
+{% block admin %}
+        <h1 class="text-3xl font-bold text-center">Ajouter une catégorie</h1>
+
+        <a href="{{ path('page_admin_category_index') }}" class="mt-8 p-2 block">&larr; Retour à la liste des catégories</a>
+
+        <div class="mt-5">
+            {{ include('admin/category/_form.html.twig') }}
+        </div>
+
+        <a href="{{ path('page_admin_category_index') }}" class="mt-8 p-2 block">&larr; Retour à la liste des catégories</a>
+{% endblock %}

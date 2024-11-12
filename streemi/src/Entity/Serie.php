@@ -57,4 +57,15 @@ class Serie extends Media
     {
         return MediaTypeEnum::TV_SHOW->value;
     }
+
+    public function getDuration(): int
+    {
+        $duration = 0;
+
+        foreach ($this->seasons as $season) {
+            $duration += $season->getDuration();
+        }
+
+        return $duration;
+    }
 }

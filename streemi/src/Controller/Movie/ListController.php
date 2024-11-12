@@ -39,7 +39,7 @@ class ListController extends AbstractController
         $myPlaylists = $currentUser->getPlaylists();
         $myPlalistSubscriptions = $currentUser->getPlaylistSubscriptions();
 
-        return $this->render('movie/lists.html.twig',[
+        return $this->render('lists/lists.html.twig',[
             'playlists' => $myPlaylists,
             'playlistSubscriptions' => $myPlalistSubscriptions,
             'currentPlaylist' => $currentPlaylist

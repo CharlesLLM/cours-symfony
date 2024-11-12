@@ -86,15 +86,25 @@ class AuthController extends AbstractController
         }
 
         $form = $this->createForm(PasswordResetType::class);
-        $form->handleRequest($request);
         $form->setData(['email' => $user->getEmail()]);
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setResetPasswordToken(null);
-            $entityManager->flush();
 
-            $this->addFlash('success', 'Mot de passe réinitialisé');
-            return $this->redirectToRoute('page_login');
+            $data = $form->getData();
+            $plainPassword = $data['plainPassword'];
+            $repeatPassword = $data['repeatPassword'];
+
+            if ($plainPassword === $repeatPassword) {
+                $user->setResetPasswordToken(null);
+                $user->setPlainPassword($plainPassword);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Mot de passe réinitialisé');
+                return $this->redirectToRoute('page_login');
+            }
+
+            $this->addFlash('error', 'Les mots de passe ne correspondent pas');
         }
 
         return $this->render(view: 'auth/reset.html.twig', parameters: [

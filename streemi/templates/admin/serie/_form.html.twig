@@ -1,0 +1,140 @@
+{{ form_start(form) }}
+
+<section class="mt-9">
+
+    <div class="relative mb-2">
+        {{ form_row(form.title) }}
+    </div>
+    <div class="relative mb-2">
+        {{ form_row(form.coverImage) }}
+    </div>
+    <div class="relative mb-2">
+        {{ form_row(form.shortDescription) }}
+    </div>
+    <div class="relative mb-2">
+        {{ form_row(form.longDescription) }}
+    </div>
+    <div class="relative mb-2">
+        <div class="mx-auto">
+            {{ form_row(form.categories) }}
+        </div>
+    </div>
+    <div class="relative flex space-x-3 mb-2">
+        <div class="w-1/2">
+            {{ form_row(form.languages) }}
+        </div>
+        <div class="w-1/2">
+            {{ form_row(form.subtitles) }}
+        </div>
+    </div>
+    <div class="relative flex space-x-3 mb-2">
+        <div class="w-1/2">
+            {{ form_row(form.releaseDate) }}
+        </div>
+        <div class="w-1/2">
+            {{ form_row(form.score) }}
+        </div>
+    </div>
+
+    <div class="relative flex space-x-3">
+        <h2 class="text-lg font-medium text-black mt-8">Le <span class="font-bold text-red-600">Staff</span></h2>
+    </div>
+    <ul
+            data-collection-prototype="staff"
+            data-index="{{ form.staff|length > 0 ? form.staff|last.vars.name + 1 : 0 }}"
+            data-prototype="{{ form_widget(form.staff.vars.prototype)|e('html_attr') }}"
+    >
+        {{ form_row(form.staff) }}
+    </ul>
+    <button data-collection-button="staff" class="relative flex w-auto bg-red-600 flex-row p-2 items-center justify-center rounded-lg overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105">
+        <svg class="h-5 w-5 mr-3" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>plus-circle</title><path d="M17,13H13V17H11V13H7V11H11V7H13V11H17M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"></path></svg>
+        Ajouter un membre du staff
+    </button>
+
+    <div class="relative flex space-x-3">
+        <h2 class="text-lg font-medium text-black mt-8">Le <span class="font-bold text-red-600">Casting</span></h2>
+    </div>
+    <ul
+            data-collection-prototype="casting"
+            data-index="{{ form.casting|length > 0 ? form.casting|last.vars.name + 1 : 0 }}"
+            data-prototype="{{ form_widget(form.casting.vars.prototype)|e('html_attr') }}"
+    >
+        {{ form_row(form.casting) }}
+    </ul>
+    <button data-collection-button="casting" class="relative flex w-auto bg-red-600 flex-row p-2 items-center justify-center rounded-lg overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105">
+        <svg class="h-5 w-5 mr-3" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>plus-circle</title><path d="M17,13H13V17H11V13H7V11H11V7H13V11H17M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"></path></svg>
+        Ajouter un membre du casting
+    </button>
+
+    <div class="relative flex space-x-3">
+        <h2 class="text-lg font-medium text-black mt-8">Le <span class="font-bold text-red-600">Saison</span></h2>
+    </div>
+    <ul
+            data-collection-prototype="season"
+            data-index="{{ form.seasons|length > 0 ? form.seasons|last.vars.name + 1 : 0 }}"
+            data-prototype="{{ form_widget(form.seasons.vars.prototype)|e('html_attr') }}"
+    >
+        {{ form_row(form.seasons) }}
+    </ul>
+    <button data-collection-button="season" class="relative flex w-auto bg-red-600 flex-row p-2 items-center justify-center rounded-lg overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105">
+        <svg class="h-5 w-5 mr-3" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>plus-circle</title><path d="M17,13H13V17H11V13H7V11H11V7H13V11H17M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"></path></svg>
+        Ajouter une saison
+    </button>
+
+    <div class="flex items-center justify-center !mt-20">
+        <button type="submit" class="relative flex w-full bg-green-600 hover:bg-green-700 flex-row p-3 items-center justify-center rounded-lg overflow-hidden border cursor-pointer transition text-white hover:opacity-90 hover:scale-105">
+            <svg class="fill-current h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>plus-circle</title><path d="M17,13H13V17H11V13H7V11H11V7H13V11H17M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"></path></svg>
+            {{ button_label|default("Ajouter la serie") }}
+        </button>
+    </div>
+
+</section>
+{{ form_end(form) }}
+
+<script>
+    function addFormToCollection(e) {
+        e.preventDefault();
+        const collectionHolder = document.querySelector(`[data-collection-prototype="${e.currentTarget.dataset.collectionButton}"]`);
+        const item = document.createElement('li');
+
+        item.innerHTML = collectionHolder
+            .dataset
+            .prototype
+            .replace(
+                /__name__/g,
+                collectionHolder.dataset.index
+            );
+
+        collectionHolder.appendChild(item);
+        collectionHolder.dataset.index++;
+
+        addFormDeleteLink(item)
+    }
+
+    document
+        .querySelectorAll('[data-collection-button]')
+        .forEach(btn => {
+            btn.addEventListener("click", addFormToCollection)
+        });
+
+    // delete
+
+    function addFormDeleteLink(item) {
+        const removeFormButton = document.createElement('button');
+        removeFormButton.innerText = 'Supprimer';
+        removeFormButton.classList.add('bg-black/40', 'text-white', 'p-1', 'rounded-lg', 'mt-2', 'mb-4', 'text-xs');
+
+        item.append(removeFormButton);
+
+        removeFormButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            item.remove();
+        });
+    }
+
+    document
+        .querySelectorAll('ul[data-collection-prototype] li')
+        .forEach((tag) => {
+            addFormDeleteLink(tag)
+        })
+</script>

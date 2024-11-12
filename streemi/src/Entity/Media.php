@@ -74,6 +74,16 @@ abstract class Media
     #[ORM\OneToMany(targetEntity: PlaylistMedia::class, mappedBy: 'media')]
     private Collection $playlistMedia;
 
+    #[ORM\Column]
+    private int $score = 0;
+
+    /**
+     * @var Collection<int, Language>
+     */
+    #[ORM\ManyToMany(targetEntity: Language::class)]
+    #[ORM\JoinTable(name: 'media_subtitle')]
+    private Collection $subtitles;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -81,6 +91,7 @@ abstract class Media
         $this->playlistMedia = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->languages = new ArrayCollection();
+        $this->subtitles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -313,4 +324,41 @@ abstract class Media
     }
 
     abstract public function getMediaType(): string;
+    abstract public function getDuration(): int;
+
+    public function getScore(): ?int
+    {
+        return $this->score;
+    }
+
+    public function setScore(int $score): static
+    {
+        $this->score = $score;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Language>
+     */
+    public function getSubtitles(): Collection
+    {
+        return $this->subtitles;
+    }
+
+    public function addSubtitle(Language $subtitle): static
+    {
+        if (!$this->subtitles->contains($subtitle)) {
+            $this->subtitles->add($subtitle);
+        }
+
+        return $this;
+    }
+
+    public function removeSubtitle(Language $subtitle): static
+    {
+        $this->subtitles->removeElement($subtitle);
+
+        return $this;
+    }
 }

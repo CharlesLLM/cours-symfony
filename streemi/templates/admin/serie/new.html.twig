@@ -1,0 +1,14 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Ajouter une serie{% endblock %}
+
+{% block admin %}
+    <section>
+        <h1 class="text-lg font-medium text-black mb-9">Ajouter <span class="font-bold text-red-600">un serie/une série</span></h1>
+        <a href="{{ path('page_admin_serie_index') }}" class="underline decoration-2 decoration-red-400 hover:text-red-600 inline-flex items-center"><svg class="fill-current h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>arrow-left</title><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"></path></svg> Revenir à la liste des series</a>
+    </section>
+
+    {{ include('admin/serie/_form.html.twig') }}
+
+    <a href="{{ path('page_admin_serie_index') }}" class="underline decoration-2 decoration-red-400 hover:text-red-600 inline-flex items-center mt-4"><svg class="fill-current h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>arrow-left</title><path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"></path></svg> Revenir à la liste des series</a>
+{% endblock %}

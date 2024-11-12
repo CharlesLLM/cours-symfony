@@ -87,4 +87,14 @@ class Language
 
         return $this;
     }
+
+    public function getMovies(): Collection
+    {
+        return $this->medias->filter(fn(Media $media) => $media instanceof Movie);
+    }
+
+    public function getSeries(): Collection
+    {
+        return $this->medias->filter(fn(Media $media) => $media instanceof Serie);
+    }
 }

@@ -1,8 +1,6 @@
 {% extends 'base_without_sidebar.html.twig' %}
 
 {% block body %}
-{#    <div class="flex-1 py-10 px-5 sm:px-10">#}
-        {% block content %}{% endblock %}
-{#    </div>#}
+    {% block content %}{% endblock %}
     {% include 'parts/right-sidebar.html.twig' %}
 {% endblock %}
