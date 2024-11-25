@@ -1,6 +1,7 @@
 # Suivi de la formation
 
-## Cours du Mardi 01 Octobre
+
+## Cours du Mardi 01 Octobre (3) :
 
 - Installation de l'environnement de développement
 - Structure des dossiers
@@ -8,18 +9,34 @@
 - Créer ses propres routes/controllers pour afficher les pages des templates
 
 
-## Cours du Mercredi 02 Octobre
+## Cours du Mercredi 02 Octobre (2) :
 
 - Utiliser des sous templates avec Twig
 - Créer des entités avec le CLI de Symfony
 - Relations et héritages entre entités
 
 
-## Cours du Samedi 02 Novembre
+## Cours du Samedi 02 Novembre (2) :
 
 - Relations et héritages entre entités
 - Migrations
 - Fixtures (php + yaml)
-- Lancement Projet Final
+- Présentation projet de fin de formation
 
 
+## A suivre :
+
+- Revisions
+- Intro QueryBuilder
+- QCM Noté
+- Templating (affichage & boucles for)
+- Authentification (login, logout, forgot, reset), UserProvider, Firewall, Role Hierarchy, Voter simple
+- Evenements pour hasher le mot de passe
+- Envoi d'emails
+- Formulaires basiques (CRUD) pour les Catégories et les Langues
+- Formulaires avancés (CRUD)
+- Validation des données
+- Call API Externe
+- Services
+- Tests
+- ...
