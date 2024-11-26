@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Repository\MediaRepository;
+use App\Repository\MovieRepository;
+use App\Repository\SerieRepository;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
@@ -19,8 +22,14 @@ class HomeController extends AbstractController
     }
 
     #[Route(path: '/', name: 'page_homepage')]
-    public function home(): Response
+    public function home(
+        MediaRepository $mediaRepository,
+    ): Response
     {
-        return $this->render(view: 'index.html.twig');
+        $medias = $mediaRepository->findPopular(maxResults: 9);
+
+        return $this->render(view: 'index.html.twig', parameters: [
+            'medias' => $medias,
+        ]);
     }
 }

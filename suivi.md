@@ -24,6 +24,13 @@
 - Présentation projet de fin de formation
 
 
+## Cours du Mardi 26 Novembre (2) : 
+
+- Injection des entités
+- Point sur ce qu'est le service container, l'injection de dépendances, l'autowiring, l'autoconfiguration
+- Templating (affichage & boucles for)
+- Intro QueryBuilder
+
 ## A suivre :
 
 - Revisions
