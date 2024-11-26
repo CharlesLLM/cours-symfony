@@ -29,11 +29,11 @@
 - Intro des fixtures YAML
 - Injection des entités dans les controllers
 - Templating (affichage & boucles for)
-- Intro QueryBuilder
 
 
 ## A suivre : 
 
+- Intro QueryBuilder
 - Revisions
 - QCM Noté
 - Présentation projet de fin de formation
