@@ -34,9 +34,7 @@
 > Pour chaque entité (table dans la db), vous devez ajouter des propriétés grace à la commande symfony. Le nom des propriété est toujours en camelCase et en anglais. Le nom de la propriété ne doit pas contenir "id"
 
 - Créez une entité pour chacune des tables suivantes : categories, languages, user, subscription, playlist, comment, media, movie, serie, season, episode
-
 - Créez une entité pour chacune des tables suivantes : subscription_history, playlist_subscription, watch_history, playlist_media
-
 - Faites les liaisons entre les différentes tables (OneToMany, ManyToMany)
 - Faites la liaison entre Categorie et Media et entre Language et Media (ManyToMany)
 
@@ -55,7 +53,6 @@
 
 - Créez un fichier fixtures php avec la commande Symfony
 - Ouvrez le fichier créé
-
 - Créez 2 catégories différentes (Action et Aventure par exemple) en faisant du PHP Objet (donc en faisant un new Categorie() et en utilisant les setters pour mettre des données à l'intérieur)
 - Chargez vos fixtures en DB grace à la commande Symfony
 
@@ -64,7 +61,6 @@
 - Faites la même chose pour les langues, cette fois en utilisant un boucle for (ou foreach peu importe)
 - Faites pareil en ajoutant un utilisateur, un media, une playlist
 - Relier dans les fixtures les media aux catégories, aux langues et aux playlist
-
 - Faites ça pour TOUTES les entités
 
 ## Fixtures YAML
@@ -96,12 +92,13 @@
 - Découpez votre fichier base.html.twig en sous-template, (parts/left-menu.html.twig et parts/right-sidebar.html.twig)
 - Ouvrez le fichier index.html.twig, supprimez tout le code en commun avec le fichier base.html.twig et entourez le code spécifique de votre page par un "block" content. Ajouter une titre à votre page avec le block "title"
 - Découpez votre page en sous-template (par exemple un sous template pour les cards des films/séries) : 'parts/movies/movie-card.html.twig'
-
 - Faites la même chose pour la page "discover.html.twig", "category.html.twig", "abonnement.html.twig", "list.html.twig", "detail.html.twig" et "detail_serie.html.twig"
 
 > Vos pages doivent donc ne plus avoir de code en commun et doivent toutes avoir un block "content" et un block "title"
 
 > Vous devez également sur toutes vos pages avoir un "include" de sous-template
+
+- Modifier le sous template left-menu.html.twig pour ajouter les liens vers les différentes pages de l'application. Pensez aussi à utiliser des if pour ajouter des classes tailwind sur l'element actif en utilisant : {% if app.current_route == 'nom_de_la_page' %}fill-red-600{% endif %}
 
 ## Utilisez la BDD avec les templates
 
