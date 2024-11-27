@@ -25,13 +25,17 @@
 - Injection des entités dans les controllers
 
 
+## Cours du 26 Novembre (2) : 
+
+- Injection des repositories dans les controllers (suite)
+- Injection des entités dans les controllers (suite)
+- Templating (affichage & boucles for) (suite)
+- Présentation projet de fin de formation
+
 ## A suivre :
 
-- Revisions
 - Intro QueryBuilder
 - QCM Noté
-- Présentation projet de fin de formation
-- Templating (affichage & boucles for)
 - Authentification (login, logout, forgot, reset), UserProvider, Firewall, Role Hierarchy, Voter simple
 - Evenements pour hasher le mot de passe
 - Envoi d'emails
