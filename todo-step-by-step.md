@@ -37,8 +37,7 @@
 - Créez une entité pour chacune des tables suivantes : subscription_history, playlist_subscription, watch_history, playlist_media
 - Faites les liaisons entre les différentes tables (OneToMany, ManyToMany)
 - Faites la liaison entre Categorie et Media et entre Language et Media (ManyToMany)
-
-- Faites l'héritage entre
+- Faites l'héritage entre les entités Movie et Serie (Serie hérite de Media et Movie hérite de Media)
 
 ## Migration
 
