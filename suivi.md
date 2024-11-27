@@ -32,11 +32,16 @@
 - Templating (affichage & boucles for) (suite)
 - Présentation projet de fin de formation
 
+## Cours du 27 Novembre (2) :
+
+- Templating (affichage & boucles for) (suite)
+- Authentification (login, logout), UserProvider, Firewall, Role Hierarchy
+
 ## A suivre :
 
 - Intro QueryBuilder
 - QCM Noté
-- Authentification (login, logout, forgot, reset), UserProvider, Firewall, Role Hierarchy, Voter simple
+- Authentification (forgot, reset) Voter simple
 - Evenements pour hasher le mot de passe
 - Envoi d'emails
 - Formulaires basiques (CRUD) pour les Catégories et les Langues
