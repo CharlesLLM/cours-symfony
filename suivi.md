@@ -34,9 +34,7 @@
 ## A suivre :
 
 - Revisions
-- Intro QueryBuilder
 - QCM Noté
-- Templating (affichage & boucles for)
 - Authentification (login, logout, forgot, reset), UserProvider, Firewall, Role Hierarchy, Voter simple
 - Evenements pour hasher le mot de passe
 - Envoi d'emails
